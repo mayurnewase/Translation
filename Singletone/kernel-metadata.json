@@ -1,0 +1,10 @@
+{
+	"id":"mayurnewase/transformer-4",
+	"title":"transformer-4",
+	"code_file":"singletone.py",
+	"language":"python",
+	"kernel_type":"script",
+	"is_private":"true",
+	"enable_gpu":"true",
+	"enable_internet":"true"
+}
