@@ -2,8 +2,8 @@ from keras.models import *
 from keras.layers import *
 from keras.optimizers import Adam
 
-#from utils import *
-#from modules import *
+from utils import *
+from modules import *
 
 class transfomer():
     def __init__(self, ip_max_len, op_max_len, d_model, d_inner, n_head, dropout,
@@ -20,6 +20,8 @@ class transfomer():
         self.n_layers = n_layers
         self.dropout = dropout
         self.lr = lr
+        self.eng_vocab_len = eng_vocab_len
+        self.fren_vocab_size = fren_vocab_size
         
         self.ip_word_emb = Embedding(input_dim = eng_vocab_len , output_dim = self.d_model, name="word_embd")
         self.op_word_emb = Embedding(input_dim = fren_vocab_size , output_dim = self.d_model , name="output_word_embd")

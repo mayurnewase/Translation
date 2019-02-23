@@ -46,11 +46,11 @@ def getPosEmbeddingMatrix(max_seq_len , d_embed):
 
     return pos_enc
 
-
 def get_loss(args):
     y_pred, y_true = args
     y_true = tf.cast(y_true, 'int32')
-    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y_true, logits=y_pred)
+    print("y_pred shape is {0} y_true shape is {1}".format(y_pred.shape, y_true.shape))
+    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y_true, logits=y_pred)   #using sparse -> labels one hot not needed
     mask = tf.cast(tf.not_equal(y_true, 0), 'float32')
     loss = tf.reduce_sum(loss * mask, -1) / tf.reduce_sum(mask, -1)
     loss = K.mean(loss)
@@ -63,7 +63,7 @@ def get_accuracy(args):
     corr = K.sum(corr * mask, -1) / K.sum(mask, -1)
     return K.mean(corr)
 
-def decode_sentence(model, input_seq ,fren_vocab , inv_fren_vocab, op_max_len, sos_index, eos_index):
+def decode_sentence_transformer(model, input_seq ,fren_vocab , inv_fren_vocab, op_max_len, sos_index, eos_index):
     tgt_sen = np.zeros((1 , op_max_len))
     tgt_sen[0,0] = sos_index
     final_sen = ""
@@ -77,6 +77,21 @@ def decode_sentence(model, input_seq ,fren_vocab , inv_fren_vocab, op_max_len, s
             break
     return final_sen
 
+def decode_sentence_attention(model, input_seq ,fren_vocab , inv_fren_vocab, op_max_len, sos_index, eos_index, nsa):
+    #def predict(model , index_to_pred , x_hot , eng , fren , fren_vocab):
+    a0 = c0 = np.zeros((1, nsa))
+
+    pred = model.predict([input_seq, a0, c0])
+    pred_arr = np.array(pred)
+    pred_arr = np.squeeze(np.argmax(pred_arr , axis = 2))
+    op = []
+    for i in np.squeeze(pred_arr):
+        op.append(inv_fren_vocab.get(i))
+        if(i == eos_index):
+            break
+
+    return op
+
 def invertor(sen, inv_vocab):
     inv = []
     for i in sen:
@@ -85,6 +100,18 @@ def invertor(sen, inv_vocab):
         except:
             break
     return inv
+
+def custom_softmax_2(x, axis=1):
+    
+    ndim = K.ndim(x)
+    if ndim == 2:
+        return K.softmax(x)
+    elif ndim > 2:
+        e = K.exp(x - K.max(x, axis=axis, keepdims=True))
+        s = K.sum(e, axis=axis, keepdims=True)
+        return e / s
+    else:
+        raise ValueError('Cannot apply softmax to a tensor that is 1D')
 
 def dumper(file, name):
 	pickle.dump(file, open("pickle/" + name + ".pkl", "wb"))
