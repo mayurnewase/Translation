@@ -1,9 +1,10 @@
 # Translation
 
 Using current State of the Art models for translating english to french.
+
 Currently hosted live at https://whispering-brook-50228.herokuapp.com/
 
-`might be down coz loading biggie models on free small dynos...will make smaller models later`
+`Note: Small models are hosted because of 500 MB memory limit.`
 
 Dataset used is taken from manything.org(link -> http://www.manythings.org/anki/fra-eng.zip)
 
