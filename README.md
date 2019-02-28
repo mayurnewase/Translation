@@ -8,6 +8,13 @@ Currently hosted live at https://whispering-brook-50228.herokuapp.com/
 
 Dataset used is taken from manything.org(link -> http://www.manythings.org/anki/fra-eng.zip)
 
+Files Info:
+
+    main.py:Runs end to end project
+    Serialize.py:Create standalone script from all modules(easy to run on colab,kaggle)
+    Dockerfile:Docker configs
+    app.py:For hosting on Heroku
+
 How to run:
 
 `Important:Serialize.py is designed to create standalone script that can run on cloud compute services(like kaggle, colab)
