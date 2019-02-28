@@ -2,11 +2,14 @@ import argparse
 import numpy as np
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--filename", default = "None")
+parser.add_argument("--filename", default = "fra.txt")
 parser.add_argument("--data_dir", default = "data/")
 parser.add_argument("--log_dir", default = "logs/")
 parser.add_argument("--embed_dir", default = "./")
 parser.add_argument("--model_dir", default = "model/")
+
+parser.add_argument("--train_transformer", default = "False")
+parser.add_argument("--train_att", default = "True")
 
 parser.add_argument("--vocab_words", default="90000")
 parser.add_argument("--filters", default="")
@@ -28,6 +31,12 @@ parser.add_argument("--heads",  default = "5")
 parser.add_argument("--layers",  default = "3")
 parser.add_argument("--dropout",  default = "0.2")
 
+parser.add_argument("--nfa",  default = "64")   #attention model
+parser.add_argument("--nsa",  default = "64")
+parser.add_argument("--dense1",  default = "64")
+parser.add_argument("--activation1",  default = "tanh")
+parser.add_argument("--activation2",  default = "relu")
+
 parser.add_argument("--epochs",  default = "10")
 parser.add_argument("--batch_size", default = "512")
 parser.add_argument("--lr", default = "0.0001")
@@ -39,7 +48,7 @@ parser.add_argument("--files_to_copy", type = str)
 parser.add_argument("--file_impo_lines", type=str)
 parser.add_argument("--main_parser_lines", type=str)
 
-parser.add_argument("--info", type=str)
+parser.add_argument("--info", type=str, default = "no info provided")
 parser.add_argument("--kernel_name", type=str)
 
 args = parser.parse_args()
@@ -62,6 +71,9 @@ w.write(
 	"embed_dir = " + "\"" +args.embed_dir + "\"" + "\n"
 	"model_dir ="+ "\"" + args.model_dir + "\"" + "\n"
 
+	"train_transformer =" + args.train_transformer + "\n"
+	"train_att =" + args.train_att + "\n"
+
 	"vocab_words =" + args.vocab_words + "\n"
 	"filters ="+ "\"" + args.filters+ "\""+ "\n"
 	"lower =" + args.lower + "\n"
@@ -80,6 +92,12 @@ w.write(
 	"heads =" + args.heads + "\n"
 	"layers =" + args.layers + "\n"
 	"dropout =" + args.dropout + "\n"
+
+	"nfa =" + args.d_model + "\n"
+	"nsa =" + args.d_model + "\n"
+	"dense1 =" + args.d_model + "\n"
+	"activation1 = "+ "\"" + args.activation1+ "\"" + "\n"
+	"activation2 = "+ "\"" + args.activation2+ "\"" + "\n"
 
 	"epochs =" + args.epochs + "\n"
 	"batch_size =" + args.batch_size + "\n"

@@ -8,9 +8,9 @@ Model Components
 """
 
 from keras.models import *
-#from utils import *
 from keras.layers import *
 
+from utils import *
 
 class DotProductAttention():
     def __init__(self , d_model, dropout):
@@ -228,3 +228,38 @@ class LayerNormalization(Layer):
         return self.gamma * (x - mean) / (std + self.eps) + self.beta
     def compute_output_shape(self, input_shape):
         return input_shape
+
+
+class OneStepAttention():
+    def __init__(self, ip_max_len, dense1= 40, dropout= 0.2 , activation1= "tanh", activation2= "relu"):
+        self.repeator = RepeatVector(ip_max_len)
+        self.concatenator = Concatenate(axis=-1)
+        self.densor1 = Dense(dense1, activation = activation1)
+        self.dropper = Dropout(dropout)
+        self.densor2 = Dense(1, activation = activation2)
+        self.activator = Activation(custom_softmax_2 , name='attention_weights') # We are using a custom softmax(axis = 1) loaded in this notebook
+        self.dotor = Dot(axes = 1)
+
+    def __call__(self, a, s_prev):
+        s_prev = self.repeator(inputs = s_prev)
+        concat = self.concatenator([a , s_prev])
+        e = self.densor1(concat)
+        e = self.dropper(e)
+        energies = self.densor2(e)
+        alphas = self.activator(energies)
+        context = self.dotor([alphas , a])
+        
+        return context
+
+
+def custom_softmax_2(x, axis=1):
+    
+    ndim = K.ndim(x)
+    if ndim == 2:
+        return K.softmax(x)
+    elif ndim > 2:
+        e = K.exp(x - K.max(x, axis=axis, keepdims=True))
+        s = K.sum(e, axis=axis, keepdims=True)
+        return e / s
+    else:
+        raise ValueError('Cannot apply softmax to a tensor that is 1D')
