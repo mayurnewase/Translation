@@ -10,7 +10,7 @@ pickleshare==0.7.5
 requests==2.19.1
 scikit-learn==0.19.2
 scipy==1.1.0
-tensorflow==1.11.0
+tensorflow==1.15.4
 termcolor==1.1.0
 tornado==5.1.1
 tqdm==4.30.0
