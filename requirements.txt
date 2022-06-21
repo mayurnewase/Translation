@@ -4,7 +4,7 @@ h5py==2.8.0
 Keras==2.2.2
 Keras-Applications==1.0.7
 Keras-Preprocessing==1.0.8
-numpy==1.15.2
+numpy==1.22.0
 pandas
 pickleshare==0.7.5
 requests==2.19.1
